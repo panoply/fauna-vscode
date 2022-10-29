@@ -18,30 +18,30 @@
     {
       "comment": "Floating point literal (fraction)",
       "name": "constant.numeric.float.fqlx",
-      "match": "\\b[0-9][0-9_]*\\.[0-9][0-9_]*([eE][+-]?[0-9_]+)?\\b"
+      "match": "\\b[+-]?[0-9][0-9_]*\\.[0-9][0-9_]*([eE][+-]?[0-9][0-9_]*)?\\b"
     },
     {
       "comment": "Floating point literal (exponent)",
       "name": "constant.numeric.float.fqlx",
-      "match": "\\b[0-9][0-9_]*(\\.[0-9][0-9_]*)?[eE][+-]?[0-9_]+\\b"
+      "match": "\\b[+-]?[0-9][0-9_]*(\\.[0-9][0-9_]*)?[eE][+-]?[0-9][0-9_]*\\b"
     },
     {
-      "comment": "Decimal integer literal",
+      "comment": "Integer literal (decimal)",
       "name": "constant.numeric.integer.decimal.fqlx",
       "match": "\\b[+-]?[0-9][0-9_]*\\b"
     },
     {
-      "comment": "Hexadecimal integer literal",
+      "comment": "Integer literal (hexadecimal)",
       "name": "constant.numeric.integer.hexadecimal.fqlx",
       "match": "\\b[+-]?0[xX][0-9a-fA-F_]+\\b"
     },
     {
-      "comment": "Octal integer literal",
+      "comment": "Integer literal (octal)",
       "name": "constant.numeric.integer.octal.fqlx",
       "match": "\\b[+-]?0[oO][0-7_]+\\b"
     },
     {
-      "comment": "Binary integer literal",
+      "comment": "Integer literal (binary)",
       "name": "constant.numeric.integer.binary.fqlx",
       "match": "\\b[+-]?0[bB][01_]+\\b"
     }
