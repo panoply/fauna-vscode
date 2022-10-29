@@ -1,0 +1,66 @@
+{
+  "name": "FQL-X",
+  "scopeName": "source.fqlx",
+  "patterns": [
+    {
+      "comment": "String",
+      "name": "keyword.control.fqlx",
+      "match": "\\b(let|if|match)\\b"
+    },
+    {
+      "comment": "Keyword",
+      "name": "keyword.control.fqlx",
+      "match": "\\b(let|if|match)\\b"
+    },
+    {
+      "include": "#string_literal"
+    },
+    {
+      "comment": "Floating point literal (fraction)",
+      "name": "constant.numeric.float.fqlx",
+      "match": "\\b[0-9][0-9_]*\\.[0-9][0-9_]*([eE][+-]?[0-9_]+)?\\b"
+    },
+    {
+      "comment": "Floating point literal (exponent)",
+      "name": "constant.numeric.float.fqlx",
+      "match": "\\b[0-9][0-9_]*(\\.[0-9][0-9_]*)?[eE][+-]?[0-9_]+\\b"
+    },
+    {
+      "comment": "Decimal integer literal",
+      "name": "constant.numeric.integer.decimal.fqlx",
+      "match": "\\b[+-]?[0-9][0-9_]*\\b"
+    },
+    {
+      "comment": "Hexadecimal integer literal",
+      "name": "constant.numeric.integer.hexadecimal.fqlx",
+      "match": "\\b[+-]?0[xX][0-9a-fA-F_]+\\b"
+    },
+    {
+      "comment": "Octal integer literal",
+      "name": "constant.numeric.integer.octal.fqlx",
+      "match": "\\b[+-]?0[oO][0-7_]+\\b"
+    },
+    {
+      "comment": "Binary integer literal",
+      "name": "constant.numeric.integer.binary.fqlx",
+      "match": "\\b[+-]?0[bB][01_]+\\b"
+    }
+  ],
+  "repository": {
+    "escaped_character": {
+      "name": "constant.character.escape.fqlx",
+      "match": "\\\\(x[0-9A-Fa-f]{2}|[0-2][0-7]{0,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.)"
+    },
+    "string_literal": {
+      "comment": "String literal",
+      "name": "string.quoted.double.fqlx",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "include": "#escaped_character"
+        }
+      ]
+    }
+  }
+}
