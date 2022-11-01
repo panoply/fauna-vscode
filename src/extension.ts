@@ -33,7 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // The server is implemented in node
   const serverModule = context.asAbsolutePath(
-    path.join('server', 'build', 'ts', 'src', 'index.js')
+    path.join('..', 'fqlx-lsp', 'build', 'ts', 'src', 'index.js')
   );
   // The debug options for the server
   // --inspect=6009: runs the server in Node's Inspector mode so VS Code can attach to the server for debugging
