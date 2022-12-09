@@ -3,6 +3,12 @@
   "scopeName": "source.fql",
   "patterns": [
     {
+      "comment": "Single-line comment",
+      "name": "comment.line.double-slash.fql",
+      "begin": "//",
+      "end": "$"
+    },
+    {
       "comment": "String",
       "name": "keyword.control.fql",
       "match": "\\b(let|if|match)\\b"
