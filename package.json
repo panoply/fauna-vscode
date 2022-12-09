@@ -1,7 +1,7 @@
 {
-  "name": "fqlx",
-  "displayName": "fqlx",
-  "description": "FQLX language support",
+  "name": "fql",
+  "displayName": "fql",
+  "description": "FQL language support",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.72.0"
@@ -10,8 +10,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:fqlx.helloWorld",
-    "onLanguage:fqlx"
+    "onCommand:fql.helloWorld",
+    "onLanguage:fql"
   ],
   "main": "./out/extension.js",
   "dependencies": {
@@ -41,23 +41,23 @@
   "contributes": {
     "commands": [
       {
-        "command": "fqlx.helloWorld",
+        "command": "fql.helloWorld",
         "title": "Hello World"
       }
     ],
     "languages": [
       {
-        "id": "fqlx",
+        "id": "fql",
         "extensions": [
-          ".fqlx"
+          ".fql"
         ]
       }
     ],
     "grammars": [
       {
-        "language": "fqlx",
-        "scopeName": "source.fqlx",
-        "path": "./syntax/fqlx.tmGrammar.json"
+        "language": "fql",
+        "scopeName": "source.fql",
+        "path": "./syntax/fql.tmGrammar.json"
       }
     ]
   }
