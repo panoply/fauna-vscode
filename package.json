@@ -50,7 +50,11 @@
         "id": "fql",
         "extensions": [
           ".fql"
-        ]
+        ],
+        "icon": {
+          "light": "./icons/fauna.svg",
+          "dark": "./icons/fauna-light.svg"
+        }
       }
     ],
     "grammars": [
