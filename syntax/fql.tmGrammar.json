@@ -9,6 +9,9 @@
       "end": "$"
     },
     {
+      "include": "#block_comment"
+    },
+    {
       "comment": "String",
       "name": "keyword.control.fql",
       "match": "\\b(let|if|match)\\b"
@@ -53,6 +56,17 @@
     }
   ],
   "repository": {
+    "block_comment": {
+      "comment": "Block comment",
+      "name": "comment.block.fql",
+      "begin": "/\\*",
+      "end": "\\*/",
+      "patterns": [
+        {
+          "include": "#block_comment"
+        }
+      ]
+    },
     "escaped_character": {
       "name": "constant.character.escape.fql",
       "match": "\\\\([\\\\0'\"`nrvtbf#]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{2}|u\\{[01]0[0-9a-fA-F]{0,4}\\}|u\\{[0-9a-fA-F]{1,4}\\})"

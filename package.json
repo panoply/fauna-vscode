@@ -15,6 +15,7 @@
   ],
   "main": "./out/extension.js",
   "dependencies": {
+    "fauna": "^0.9.0",
     "vscode-languageclient": "^8.0.2"
   },
   "devDependencies": {
@@ -41,8 +42,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "fql.helloWorld",
-        "title": "Hello World"
+        "command": "fql.runQuery",
+        "title": "FQL: Run Query"
       }
     ],
     "languages": [
@@ -62,6 +63,14 @@
         "language": "fql",
         "scopeName": "source.fql",
         "path": "./syntax/fql.tmGrammar.json"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "fql.runQuery",
+        "key": "ctrl+enter",
+        "mac": "cmd+enter",
+        "when": "editorTextFocus && editorLangId == fql"
       }
     ]
   }
