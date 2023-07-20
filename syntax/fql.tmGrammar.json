@@ -12,17 +12,15 @@
       "include": "#block_comment"
     },
     {
-      "comment": "String",
-      "name": "keyword.control.fql",
-      "match": "\\b(let|if|match)\\b"
-    },
-    {
       "comment": "Keyword",
       "name": "keyword.control.fql",
-      "match": "\\b(let|if|match)\\b"
+      "match": "\\b(let|at|if|else|isa)\\b"
     },
     {
-      "include": "#string_literal"
+      "include": "#single_string_literal"
+    },
+    {
+      "include": "#double_string_literal"
     },
     {
       "comment": "Floating point literal (fraction)",
@@ -53,6 +51,50 @@
       "comment": "Integer literal (binary)",
       "name": "constant.numeric.integer.binary.fql",
       "match": "\\b[+-]?0[bB][01_]+\\b"
+    },
+    {
+      "comment": "Boolean constant",
+      "name": "constant.language.boolean.fql",
+      "match": "\\b(true|false)\\b"
+    },
+    {
+      "comment": "Null constant",
+      "name": "constant.language.null.fql",
+      "match": "\\bnull\\b"
+    },
+    {
+      "comment": "Function call",
+      "match": "\\b([A-Za-z][A-Za-z0-9_]*|_[A-Za-z0-9_]+)\\s*\\(",
+      "captures": {
+        "1": {
+          "name": "entity.name.function.fql"
+        }
+      }
+    },
+    {
+      "comment": "Standard library modules",
+      "name": "entity.name.type.class.std.fql",
+      "match": "\\b(Collection|Function|Role|AccessProvider|Database|Key|Credential|Token|Array|Boolean|Date|Math|Null|Number|Int|Long|Double|Float|Object|Set|SetCursor|Struct|Time|TransactionTime|Query)\\b"
+    },
+    {
+      "comment": "Miscellaneous operator",
+      "name": "keyword.operator.misc.fql",
+      "match": "=>"
+    },
+    {
+      "comment": "Comparison operator",
+      "name": "keyword.operator.comparison.fql",
+      "match": "(&&|\\|\\||==|!=)"
+    },
+    {
+      "comment": "Arithmetic operator",
+      "name": "keyword.operator.arithmetic.fql",
+      "match": "(!|\\+|-|/|\\*|%|\\^|&|\\||<<|>>)"
+    },
+    {
+      "comment": "Comparison operator (second group because of regex precedence)",
+      "name": "keyword.operator.comparison.fql",
+      "match": "(<=|>=|<|>)"
     }
   ],
   "repository": {
@@ -71,14 +113,33 @@
       "name": "constant.character.escape.fql",
       "match": "\\\\([\\\\0'\"`nrvtbf#]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{2}|u\\{[01]0[0-9a-fA-F]{0,4}\\}|u\\{[0-9a-fA-F]{1,4}\\})"
     },
-    "string_literal": {
-      "comment": "String literal",
+    "interpolated_value": {
+      "name": "constant.character.escape.fql",
+      "begin": "#{",
+      "end": "}"
+    },
+    "single_string_literal": {
+      "comment": "String literal (single quotes)",
+      "name": "string.quoted.single.fql",
+      "begin": "'",
+      "end": "'",
+      "patterns": [
+        {
+          "include": "#escaped_character"
+        }
+      ]
+    },
+    "double_string_literal": {
+      "comment": "String literal (double quotes)",
       "name": "string.quoted.double.fql",
       "begin": "\"",
       "end": "\"",
       "patterns": [
         {
           "include": "#escaped_character"
+        },
+        {
+          "include": "#interpolated_value"
         }
       ]
     }
