@@ -3,6 +3,7 @@
   "displayName": "fql",
   "description": "FQL language support",
   "version": "0.0.1",
+  "publisher": "Fauna",
   "engines": {
     "vscode": "^1.72.0"
   },
@@ -40,6 +41,17 @@
     "test": "node ./out/test/runTest.js"
   },
   "contributes": {
+    "configuration": {
+      "title": "Fauna",
+      "type": "object",
+      "properties": {
+        "fauna.dbSecret": {
+          "type": "string",
+          "default": "",
+          "description": "The secret to use to connnect to your fauna database."
+        }
+      }
+    },
     "commands": [
       {
         "command": "fql.runQuery",
