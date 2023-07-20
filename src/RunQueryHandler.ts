@@ -18,7 +18,7 @@ export class RunQueryHandler implements ConfigurationChangeSubscription {
     });
   }
 
-  runQuery = async () => {
+  async runQuery() {
     const { activeTextEditor } = vscode.window;
 
     if (!activeTextEditor || activeTextEditor.document.languageId !== "fql") {

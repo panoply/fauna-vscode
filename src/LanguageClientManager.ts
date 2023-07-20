@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as vscode from "vscode";
 import { LanguageClient, LanguageClientOptions, RevealOutputChannelOn, ServerOptions, TransportKind } from "vscode-languageclient/node";
-import { ConfigurationChangeSubscription, FQLConfiguration } from "./FQLConfigurationManager";
+import { ConfigurationChangeSubscription, FQLConfiguration, FQLConfigurationManager } from "./FQLConfigurationManager";
 
 export class LanguageClientManager implements ConfigurationChangeSubscription {
   client: LanguageClient;
@@ -9,8 +9,6 @@ export class LanguageClientManager implements ConfigurationChangeSubscription {
 
   constructor(context: vscode.ExtensionContext, outputChannel: vscode.OutputChannel) {
     this.outputChannel = outputChannel;
-
-    const isDebug = context.extensionMode === vscode.ExtensionMode.Development;
 
     // The server is implemented in node
     const serverModule = context.asAbsolutePath(
@@ -55,10 +53,8 @@ export class LanguageClientManager implements ConfigurationChangeSubscription {
         // Notify the server about file changes to '.clientrc files contained in the workspace
         fileEvents: vscode.workspace.createFileSystemWatcher("**/.clientrc"),
       },
-      ...(isDebug ? {
-        outputChannel: vscode.window.createOutputChannel('FQL Language Server'),
-        revealOutputChannelOn: RevealOutputChannelOn.Info
-      }: {})
+      outputChannel: vscode.window.createOutputChannel('FQL Language Server'),
+      revealOutputChannelOn: RevealOutputChannelOn.Info
     };
 
     // Create the language client and start the client.
@@ -69,7 +65,7 @@ export class LanguageClientManager implements ConfigurationChangeSubscription {
     const resp = await this.client.sendRequest('setSecret', { secret: updatedConfiguration.dbSecret }) as any;
     this.outputChannel.clear();
     if (resp.status === "error") {
-      this.outputChannel.appendLine(resp.message);
+      FQLConfigurationManager.config_error_dialogue(resp.message);
     }
   }
 }
