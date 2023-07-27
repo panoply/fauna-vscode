@@ -30,6 +30,7 @@
     "eslint": "^8.24.0",
     "glob": "^10.3.3",
     "mocha": "^10.0.0",
+    "prettier": "^3.0.0",
     "typescript": "^5.1.6"
   },
   "scripts": {
@@ -38,7 +39,8 @@
     "watch": "tsc -watch -p ./",
     "pretest": "yarn run compile && yarn run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "test": "node ./out/test/runTest.js",
+    "fmt": "prettier -w src"
   },
   "contributes": {
     "configuration": {
