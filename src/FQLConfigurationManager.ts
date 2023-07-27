@@ -7,7 +7,9 @@ export class FQLConfigurationManager {
   static readonly EMPTY_SECRET = "0";
   static readonly FAUNA_CONFIG_PATH = "fauna";
   static readonly SECRET_CONFIG_FIELD = "dbSecret";
+  static readonly ENDPOINT_CONFIG_FIELD = "endpoint";
   static readonly SECRET_CONFIG_PATH = `${FQLConfigurationManager.FAUNA_CONFIG_PATH}.${FQLConfigurationManager.SECRET_CONFIG_FIELD}`;
+  static readonly ENDPOINT_CONFIG_PATH = `${FQLConfigurationManager.FAUNA_CONFIG_PATH}.${FQLConfigurationManager.ENDPOINT_CONFIG_FIELD}`;
 
   static readonly config_error_dialogue = (message: string) => {
     vscode.window.showErrorMessage(
@@ -22,7 +24,7 @@ export class FQLConfigurationManager {
 
 
   private dbSecret: string;
-  private endpoint: string = "http://localhost:8443";
+  private endpoint: string = "https://db.fauna.com";
   /** Used to send notifications when extension configuration is updated. */
   private subscriptions: ConfigurationChangeSubscription[] = [];
 
@@ -36,6 +38,11 @@ export class FQLConfigurationManager {
       this.dbSecret = FQLConfigurationManager.EMPTY_SECRET;
     } else {
       this.dbSecret = dbSecret;
+    }
+
+    const endpoint = config.get<string>(FQLConfigurationManager.ENDPOINT_CONFIG_FIELD);
+    if (endpoint !== undefined && endpoint !== "") {
+      this.endpoint = endpoint;
     }
   }
 
@@ -51,16 +58,28 @@ export class FQLConfigurationManager {
   }
 
   async onConfigurationChange(event: vscode.ConfigurationChangeEvent) {
+    let configChanged = false;
+    const faunaConfig = vscode.workspace.getConfiguration(FQLConfigurationManager.FAUNA_CONFIG_PATH);
     if (event.affectsConfiguration(FQLConfigurationManager.SECRET_CONFIG_PATH)) {
-      const newSecret = vscode.workspace.getConfiguration(FQLConfigurationManager.FAUNA_CONFIG_PATH).get<string>(FQLConfigurationManager.SECRET_CONFIG_FIELD);
+      const newSecret = faunaConfig.get<string>(FQLConfigurationManager.SECRET_CONFIG_FIELD);
       if (newSecret === undefined || newSecret === "") {
-        FQLConfigurationManager.config_error_dialogue("You must configure a databse secret for the Fauna extension.");
+        FQLConfigurationManager.config_error_dialogue("You must configure a database secret for the Fauna extension.");
       } else {
         this.dbSecret = newSecret;
-        this.subscriptions.forEach(sub => sub.configChanged(
-          this.config()
-        ));
+        configChanged = true;
       }
+    }
+    if (event.affectsConfiguration(FQLConfigurationManager.ENDPOINT_CONFIG_PATH)) {
+      const newEndpoint = faunaConfig.get<string>(FQLConfigurationManager.ENDPOINT_CONFIG_FIELD);
+      if (newEndpoint && newEndpoint !== "") {
+        this.endpoint = newEndpoint;
+        configChanged = true;
+      }
+    }
+    if (configChanged) {
+      this.subscriptions.forEach(sub => sub.configChanged(
+        this.config()
+      ));
     }
   };
 }

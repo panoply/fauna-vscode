@@ -6,7 +6,7 @@ import {
 import * as vscode from "vscode";
 
 import { FQLConfigurationManager } from "./FQLConfigurationManager";
-import { LanguageClientManager } from "./LanguageClientManager";
+import { LanguageService } from "./LanguageServer";
 import { RunQueryHandler } from "./RunQueryHandler";
 
 // This method is called when your extension is activated
@@ -33,18 +33,18 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(disposable);
 
   // Create the language client and start the client.
-  const clientManager = new LanguageClientManager(context, outputChannel);
+  const languageService = new LanguageService(context, outputChannel);
 
   // subscribe the entities that want to know when configuration changes
   fqlConfigManager.subscribeToConfigurationChanges(runQueryHandler);
-  fqlConfigManager.subscribeToConfigurationChanges(clientManager);
+  fqlConfigManager.subscribeToConfigurationChanges(languageService);
 
   vscode.workspace.onDidChangeConfiguration(event => fqlConfigManager.onConfigurationChange(event));
 
   // Start the client. This will also launch the server
-  await clientManager.client.start();
+  await languageService.start();
   // used to initialize the lsp service with the starting configuration
-  await clientManager.configChanged(fqlConfigManager.config());
+  await languageService.configChanged(fqlConfigManager.config());
 }
 
 // This method is called when your extension is deactivated

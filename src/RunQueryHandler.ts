@@ -55,7 +55,5 @@ export class RunQueryHandler implements ConfigurationChangeSubscription {
         this.outputChannel.appendLine((e as any).toString());
       }
     }
-
   };
-
 }

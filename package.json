@@ -2,8 +2,8 @@
   "name": "fql",
   "displayName": "fql",
   "description": "FQL language support",
-  "version": "0.0.1",
   "publisher": "Fauna",
+  "version": "0.0.1",
   "engines": {
     "vscode": "^1.72.0"
   },
@@ -49,6 +49,11 @@
           "type": "string",
           "default": "",
           "description": "The secret to use to connnect to your fauna database."
+        },
+        "fauna.endpoint": {
+          "type": "string",
+          "default": "https://db.fauna.com",
+          "description": "The fauna endpoint url to use. This should typically be 'https://db.fauna.com'."
         }
       }
     },
