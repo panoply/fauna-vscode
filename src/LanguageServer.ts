@@ -1,20 +1,37 @@
 import * as https from "https";
 import * as path from "path";
 import * as vscode from "vscode";
-import { LanguageClient, LanguageClientOptions, RevealOutputChannelOn, ServerOptions, TransportKind } from "vscode-languageclient/node";
-import { ConfigurationChangeSubscription, FQLConfiguration, FQLConfigurationManager } from "./FQLConfigurationManager";
+import {
+  LanguageClient,
+  LanguageClientOptions,
+  RevealOutputChannelOn,
+  ServerOptions,
+  TransportKind,
+} from "vscode-languageclient/node";
+import {
+  ConfigurationChangeSubscription,
+  FQLConfiguration,
+  FQLConfigurationManager,
+} from "./FQLConfigurationManager";
 
 export class LanguageService implements ConfigurationChangeSubscription {
-  static readonly serverDownloadUrl = "https://static-assets.fauna.com/fql-analyzer/index.js";
+  static readonly serverDownloadUrl =
+    "https://static-assets.fauna.com/fql-analyzer/index.js";
   client: LanguageClient;
   outputChannel: vscode.OutputChannel;
   context: vscode.ExtensionContext;
   serverLocation: vscode.Uri;
 
-  constructor(context: vscode.ExtensionContext, outputChannel: vscode.OutputChannel) {
+  constructor(
+    context: vscode.ExtensionContext,
+    outputChannel: vscode.OutputChannel,
+  ) {
     this.outputChannel = outputChannel;
     this.context = context;
-    this.serverLocation = vscode.Uri.joinPath(this.context.globalStorageUri, `fql-analyzer.js`);
+    this.serverLocation = vscode.Uri.joinPath(
+      this.context.globalStorageUri,
+      `fql-analyzer.js`,
+    );
 
     // The server is implemented in node
     const serverModule = context.asAbsolutePath(
@@ -26,8 +43,8 @@ export class LanguageService implements ConfigurationChangeSubscription {
         "analyzer-lsp",
         "build",
         "node",
-        "index.js"
-      )
+        "index.js",
+      ),
     );
     // The debug options for the server
     // --inspect=6009: runs the server in Node's Inspector mode so VS Code can attach to the server for debugging
@@ -63,12 +80,17 @@ export class LanguageService implements ConfigurationChangeSubscription {
         // Notify the server about file changes to '.clientrc files contained in the workspace
         fileEvents: vscode.workspace.createFileSystemWatcher("**/.clientrc"),
       },
-      outputChannel: vscode.window.createOutputChannel('FQL Language Server'),
-      revealOutputChannelOn: RevealOutputChannelOn.Info
+      outputChannel: vscode.window.createOutputChannel("FQL Language Server"),
+      revealOutputChannelOn: RevealOutputChannelOn.Info,
     };
 
     // Create the language client and start the client.
-    this.client = new LanguageClient("fql", "FQL", serverOptions, clientOptions);
+    this.client = new LanguageClient(
+      "fql",
+      "FQL",
+      serverOptions,
+      clientOptions,
+    );
   }
 
   async start() {
@@ -89,7 +111,10 @@ export class LanguageService implements ConfigurationChangeSubscription {
   }
 
   async configChanged(updatedConfiguration: FQLConfiguration) {
-    const resp = await this.client.sendRequest("setFaunaConfig", { endpoint: updatedConfiguration.endpoint, secret: updatedConfiguration.dbSecret }) as any;
+    const resp = (await this.client.sendRequest("setFaunaConfig", {
+      endpoint: updatedConfiguration.endpoint,
+      secret: updatedConfiguration.dbSecret,
+    })) as any;
     this.outputChannel.clear();
     if (resp.status === "error") {
       FQLConfigurationManager.config_error_dialogue(resp.message);
@@ -98,24 +123,34 @@ export class LanguageService implements ConfigurationChangeSubscription {
 
   async downloadServer(): Promise<any> {
     return new Promise((resolve, reject) => {
-      https.get(LanguageService.serverDownloadUrl, res => {
-        const data: any[] = [];
-        res.on('data', chunk => {
-          data.push(chunk);
+      https
+        .get(LanguageService.serverDownloadUrl, (res) => {
+          const data: any[] = [];
+          res.on("data", (chunk) => {
+            data.push(chunk);
+          });
+          res.on("end", () => {
+            const allData = Buffer.concat(data);
+            if (res.statusCode === 200) {
+              resolve(allData);
+            } else {
+              console.error(
+                `Error downloading Language Server: ${res.statusCode} ${allData}`,
+              );
+              reject(
+                new Error(
+                  `Error downloading Language Server: ${res.statusCode}`,
+                ),
+              );
+            }
+          });
+        })
+        .on("error", (e) => {
+          console.error(`Error downloading the Language Server: ${e}`);
+          reject(
+            new Error("Error downloading the Language Server", { cause: e }),
+          );
         });
-        res.on('end', () => {
-          const allData = Buffer.concat(data);
-          if (res.statusCode === 200) {
-            resolve(allData);
-          } else {
-            console.error(`Error downloading Language Server: ${res.statusCode} ${allData}`);
-            reject(new Error(`Error downloading Language Server: ${res.statusCode}`));
-          }
-        });
-      }).on('error', (e) => {
-        console.error(`Error downloading the Language Server: ${e}`);
-        reject(new Error("Error downloading the Language Server", { cause: e }));
-      });
     });
   }
 }

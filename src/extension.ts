@@ -1,8 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import {
-  Client
-} from "fauna";
+import { Client } from "fauna";
 import * as vscode from "vscode";
 
 import { FQLConfigurationManager } from "./FQLConfigurationManager";
@@ -21,15 +19,14 @@ export async function activate(context: vscode.ExtensionContext) {
     secret: fqlConfigManager.config().dbSecret,
   });
 
-  const runQueryHandler = new RunQueryHandler(
-    fqlClient,
-    outputChannel
-  );
+  const runQueryHandler = new RunQueryHandler(fqlClient, outputChannel);
 
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
-  let disposable = vscode.commands.registerCommand("fql.runQuery", () => runQueryHandler.runQuery());
+  let disposable = vscode.commands.registerCommand("fql.runQuery", () =>
+    runQueryHandler.runQuery(),
+  );
   context.subscriptions.push(disposable);
 
   // Create the language client and start the client.
@@ -39,7 +36,9 @@ export async function activate(context: vscode.ExtensionContext) {
   fqlConfigManager.subscribeToConfigurationChanges(runQueryHandler);
   fqlConfigManager.subscribeToConfigurationChanges(languageService);
 
-  vscode.workspace.onDidChangeConfiguration(event => fqlConfigManager.onConfigurationChange(event));
+  vscode.workspace.onDidChangeConfiguration((event) =>
+    fqlConfigManager.onConfigurationChange(event),
+  );
 
   // Start the client. This will also launch the server
   await languageService.start();
