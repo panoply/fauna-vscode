@@ -1,6 +1,9 @@
 import { Client, ServiceError, fql } from "fauna";
 import * as vscode from "vscode";
-import { ConfigurationChangeSubscription, FQLConfiguration } from "./FQLConfigurationManager";
+import {
+  ConfigurationChangeSubscription,
+  FQLConfiguration,
+} from "./FQLConfigurationManager";
 
 export class RunQueryHandler implements ConfigurationChangeSubscription {
   fqlClient: Client;
@@ -14,7 +17,7 @@ export class RunQueryHandler implements ConfigurationChangeSubscription {
   configChanged(updatedConfiguration: FQLConfiguration) {
     this.fqlClient = new Client({
       endpoint: new URL(updatedConfiguration.endpoint),
-      secret: updatedConfiguration.dbSecret
+      secret: updatedConfiguration.dbSecret,
     });
   }
 
@@ -23,7 +26,7 @@ export class RunQueryHandler implements ConfigurationChangeSubscription {
 
     if (!activeTextEditor || activeTextEditor.document.languageId !== "fql") {
       vscode.window.showWarningMessage(
-        "You have to select a FQL document to run a FQL query."
+        "You have to select a FQL document to run a FQL query.",
       );
       return;
     }
@@ -55,5 +58,5 @@ export class RunQueryHandler implements ConfigurationChangeSubscription {
         this.outputChannel.appendLine((e as any).toString());
       }
     }
-  };
+  }
 }

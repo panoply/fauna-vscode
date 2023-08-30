@@ -1,12 +1,8 @@
-import {
-  Client,
-  endpoints,
-  fql
-} from "fauna";
+import { Client, endpoints, fql } from "fauna";
 import * as vscode from "vscode";
 
 export async function activateFQLExtension() {
-  const ext = vscode.extensions.getExtension('Fauna.fql');
+  const ext = vscode.extensions.getExtension("Fauna.fql");
   try {
     await ext?.activate();
     // allow time for extension to activate
@@ -19,7 +15,7 @@ export async function activateFQLExtension() {
 }
 
 export async function sleep(ms: number) {
-	return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export function getClient(): Client {
@@ -40,16 +36,17 @@ export function getLocalClient(): Client {
 export function getDevDB(secret: string): Client {
   return new Client({
     endpoint: new URL("https://db.dev.faunadb.net"),
-    secret: secret
+    secret: secret,
   });
 }
 
-
 /**
- * Returns the fqlx client to use as well as the secret to use to configure the 
+ * Returns the fqlx client to use as well as the secret to use to configure the
  * extension with.
  */
-export const clientWithFreshDB = async (name: string): Promise<[Client, string]> => {
+export const clientWithFreshDB = async (
+  name: string,
+): Promise<[Client, string]> => {
   const parentClient = getClient();
   const secretQ = await parentClient.query<string>(fql`
     if (Database.byName(${name}).exists()) {
@@ -60,8 +57,11 @@ export const clientWithFreshDB = async (name: string): Promise<[Client, string]>
     Key.create({ role: "admin", database: ${name} }).secret
   `);
 
-  return [new Client({ 
-    endpoint: parentClient.clientConfiguration.endpoint,
-    secret: secretQ.data 
-  }), secretQ.data];
+  return [
+    new Client({
+      endpoint: parentClient.clientConfiguration.endpoint,
+      secret: secretQ.data,
+    }),
+    secretQ.data,
+  ];
 };
