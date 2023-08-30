@@ -44,6 +44,13 @@
     "fmt": "prettier -w src"
   },
   "contributes": {
+    "menus": {
+      "editor/title": [{
+        "command": "fql.runQuery",
+        "group": "navigation@10",
+        "when": "resourceLangId == fql"
+      }]
+    },
     "configuration": {
       "title": "Fauna",
       "type": "object",
@@ -51,7 +58,8 @@
         "fauna.dbSecret": {
           "type": "string",
           "default": "",
-          "description": "The secret to use to connnect to your fauna database."
+          "description": "The secret to use to connnect to your fauna database.",
+          "scope": "window"
         },
         "fauna.endpoint": {
           "type": "string",
@@ -64,6 +72,10 @@
       {
         "command": "fql.runQuery",
         "title": "FQL: Run Query"
+      },
+      {
+        "command": "fql.togglePlayground",
+        "title": "FQL: Toggle Playground"
       }
     ],
     "languages": [
@@ -91,6 +103,11 @@
         "key": "ctrl+enter",
         "mac": "cmd+enter",
         "when": "editorTextFocus && editorLangId == fql"
+      },
+      {
+        "command": "fql.togglePlayground",
+        "key": "ctrl+l",
+        "mac": "cmd+l"
       }
     ]
   }
