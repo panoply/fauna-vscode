@@ -6,6 +6,7 @@ import * as vscode from "vscode";
 import { FQLConfigurationManager } from "./FQLConfigurationManager";
 import { LanguageService } from "./LanguageServer";
 import { RunQueryHandler } from "./RunQueryHandler";
+import { TogglePlaygroundCommand } from "./TogglePlaygroundCommand";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -20,14 +21,20 @@ export async function activate(context: vscode.ExtensionContext) {
   });
 
   const runQueryHandler = new RunQueryHandler(fqlClient, outputChannel);
+  const togglePlaygroundCommand = new TogglePlaygroundCommand();
 
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
-  let disposable = vscode.commands.registerCommand("fql.runQuery", () =>
-    runQueryHandler.runQuery(),
-  );
-  context.subscriptions.push(disposable);
+  const disposables = [
+    vscode.commands.registerCommand("fql.runQuery", () =>
+      runQueryHandler.runQuery(),
+    ),
+    vscode.commands.registerCommand("fql.togglePlayground", () =>
+      togglePlaygroundCommand.togglePlayground(),
+    ),
+  ];
+  context.subscriptions.push(...disposables);
 
   // Create the language client and start the client.
   const languageService = new LanguageService(context, outputChannel);

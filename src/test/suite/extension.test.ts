@@ -14,14 +14,18 @@ suite("Extension Test Suite", () => {
   let secret: string;
   setup(async () => {
     [fqlClient, secret] = await testHelper.clientWithFreshDB("VSCodeTest");
+    await fqlClient.query(fql`Collection.create({ name: "Cats" })`);
     await setConfigSecret(secret);
     if (fqlClient.clientConfiguration.endpoint) {
       await setConfigEndpoint(fqlClient.clientConfiguration.endpoint.href);
     }
   });
-  test("should test completion items", async () => {
-    await fqlClient.query(fql`Collection.create({ name: "Cats" })`);
 
+  teardown(async () => {
+    await vscode.commands.executeCommand("workbench.action.closeAllEditors");
+  });
+
+  test("should test completion items", async () => {
     await testHelper.activateFQLExtension();
 
     const documentText = "C";
@@ -35,6 +39,33 @@ suite("Extension Test Suite", () => {
       "vscode.executeCompletionItemProvider",
       doc.uri,
       position,
+    )) as vscode.CompletionList;
+
+    assert.ok(completionList.items.length > 0);
+    assert.ok(containsCollectionCompletionItem(completionList, "Collection"));
+    assert.ok(containsCollectionCompletionItem(completionList, "Cats"));
+  });
+
+  test("should open a fql scratch buffer and provide intellisense and query execution", async () => {
+    await testHelper.activateFQLExtension();
+
+    await vscode.commands.executeCommand("fql.togglePlayground");
+
+    const editor = vscode.window.activeTextEditor;
+    if (editor === undefined) {
+      assert.fail(
+        "Expected fql.openShell command to set an active text editor",
+      );
+    }
+    await editor.edit((editBuilder) => {
+      const position = new vscode.Position(0, 1);
+      editBuilder.insert(position, "C");
+    });
+
+    const completionList = (await vscode.commands.executeCommand(
+      "vscode.executeCompletionItemProvider",
+      editor.document.uri,
+      new vscode.Position(0, 1),
     )) as vscode.CompletionList;
 
     assert.ok(completionList.items.length > 0);
