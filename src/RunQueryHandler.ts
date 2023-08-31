@@ -4,13 +4,20 @@ import {
   ConfigurationChangeSubscription,
   FQLConfiguration,
 } from "./FQLConfigurationManager";
+import { LanguageService } from "./LanguageServer";
 
 export class RunQueryHandler implements ConfigurationChangeSubscription {
   fqlClient: Client;
+  languageService: LanguageService;
   outputChannel: vscode.OutputChannel;
 
-  constructor(dbClient: Client, outputChannel: vscode.OutputChannel) {
+  constructor(
+    dbClient: Client,
+    languageService: LanguageService,
+    outputChannel: vscode.OutputChannel,
+  ) {
     this.fqlClient = dbClient;
+    this.languageService = languageService;
     this.outputChannel = outputChannel;
   }
 
@@ -40,11 +47,17 @@ export class RunQueryHandler implements ConfigurationChangeSubscription {
         format: "decorated",
         typecheck: true,
       });
+
       if (response.static_type !== undefined) {
         this.outputChannel.appendLine("static type: " + response.static_type);
       }
+
       this.outputChannel.appendLine(response.summary ?? "");
       this.outputChannel.appendLine(response.data as any);
+
+      if ((response as any).schema_version !== undefined) {
+        await this.languageService.refresh((response as any).schema_version);
+      }
     } catch (e) {
       if (e instanceof ServiceError) {
         if (e.message !== undefined) {

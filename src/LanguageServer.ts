@@ -111,13 +111,24 @@ export class LanguageService implements ConfigurationChangeSubscription {
   }
 
   async configChanged(updatedConfiguration: FQLConfiguration) {
-    const resp = (await this.client.sendRequest("setFaunaConfig", {
+    const resp = (await this.client.sendRequest("fauna/setConfig", {
       endpoint: updatedConfiguration.endpoint,
       secret: updatedConfiguration.dbSecret,
     })) as any;
     this.outputChannel.clear();
     if (resp.status === "error") {
       FQLConfigurationManager.config_error_dialogue(resp.message);
+    }
+  }
+
+  async refresh(version: string) {
+    const resp = (await this.client.sendRequest("fauna/refresh", {
+      schema_version: version,
+    })) as any;
+    if (resp.status === "error") {
+      vscode.window.showErrorMessage(
+        `Failed to refresh environment: ${resp.message}`,
+      );
     }
   }
 

@@ -20,7 +20,14 @@ export async function activate(context: vscode.ExtensionContext) {
     secret: fqlConfigManager.config().dbSecret,
   });
 
-  const runQueryHandler = new RunQueryHandler(fqlClient, outputChannel);
+  // Create the language client and start the client.
+  const languageService = new LanguageService(context, outputChannel);
+
+  const runQueryHandler = new RunQueryHandler(
+    fqlClient,
+    languageService,
+    outputChannel,
+  );
   const togglePlaygroundCommand = new TogglePlaygroundCommand();
 
   // The command has been defined in the package.json file
@@ -35,9 +42,6 @@ export async function activate(context: vscode.ExtensionContext) {
     ),
   ];
   context.subscriptions.push(...disposables);
-
-  // Create the language client and start the client.
-  const languageService = new LanguageService(context, outputChannel);
 
   // subscribe the entities that want to know when configuration changes
   fqlConfigManager.subscribeToConfigurationChanges(runQueryHandler);
