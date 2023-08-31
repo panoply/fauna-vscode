@@ -47,7 +47,7 @@
     "menus": {
       "editor/title": [{
         "command": "fql.runQuery",
-        "group": "navigation@10",
+        "group": "navigation@0",
         "when": "resourceLangId == fql"
       }]
     },
