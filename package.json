@@ -37,10 +37,11 @@
   "scripts": {
     "vscode:prepublish": "yarn run compile",
     "compile": "tsc -p ./",
+    "download-analyzer": "bash ./scripts/download-analyzer.sh",
     "watch": "tsc -watch -p ./",
-    "pretest": "yarn run compile && yarn run lint",
+    "pretest": "yarn run compile && yarn run lint && yarn run download-analyzer",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js",
+    "test": "yarn pretest && node ./out/test/runTest.js",
     "fmt": "prettier -w src"
   },
   "contributes": {

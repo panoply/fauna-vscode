@@ -1,4 +1,3 @@
-import * as https from "https";
 import * as path from "path";
 import * as vscode from "vscode";
 import {
@@ -29,8 +28,8 @@ export class LanguageService implements ConfigurationChangeSubscription {
     this.outputChannel = outputChannel;
     this.context = context;
     this.serverLocation = vscode.Uri.joinPath(
-      this.context.globalStorageUri,
-      `fql-analyzer.js`,
+      context.extensionUri,
+      "out/fql-analyzer.js",
     );
 
     // The server is implemented in node
@@ -94,19 +93,6 @@ export class LanguageService implements ConfigurationChangeSubscription {
   }
 
   async start() {
-    let exists = await vscode.workspace.fs.stat(this.serverLocation).then(
-      () => true,
-      () => false,
-    );
-
-    // todo: going to want to resfresh this at some point
-    // https://faunadb.atlassian.net/browse/ENG-5306
-    if (!exists) {
-      await vscode.workspace.fs.createDirectory(this.context.globalStorageUri);
-      const responseData = await this.downloadServer();
-      await vscode.workspace.fs.writeFile(this.serverLocation, responseData);
-    }
-
     await this.client.start();
   }
 
@@ -130,38 +116,5 @@ export class LanguageService implements ConfigurationChangeSubscription {
         `Failed to refresh environment: ${resp.message}`,
       );
     }
-  }
-
-  async downloadServer(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      https
-        .get(LanguageService.serverDownloadUrl, (res) => {
-          const data: any[] = [];
-          res.on("data", (chunk) => {
-            data.push(chunk);
-          });
-          res.on("end", () => {
-            const allData = Buffer.concat(data);
-            if (res.statusCode === 200) {
-              resolve(allData);
-            } else {
-              console.error(
-                `Error downloading Language Server: ${res.statusCode} ${allData}`,
-              );
-              reject(
-                new Error(
-                  `Error downloading Language Server: ${res.statusCode}`,
-                ),
-              );
-            }
-          });
-        })
-        .on("error", (e) => {
-          console.error(`Error downloading the Language Server: ${e}`);
-          reject(
-            new Error("Error downloading the Language Server", { cause: e }),
-          );
-        });
-    });
   }
 }
