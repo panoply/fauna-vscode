@@ -28,7 +28,70 @@ export class RunQueryHandler implements ConfigurationChangeSubscription {
     });
   }
 
+  disposables() {
+    const registerCommand = vscode.commands.registerCommand;
+    return [
+      registerCommand("fql.runQuery", () => this.runQuery()),
+      registerCommand("fql.runQueryAsRole", () => this.runQueryAsRole()),
+      // TODO
+      /*
+      registerCommand("fql.runQueryAsDoc", () => this.runQueryAsDoc()),
+      registerCommand("fql.runQueryWithSecret", () => this.runQueryWithSecret()),
+      */
+    ];
+  }
+
   async runQuery() {
+    await this.execute({});
+  }
+
+  async runQueryAsRole() {
+    const roles = await this.fqlClient.query<{
+      data: { name: string }[];
+      after?: string;
+    }>(fql`(Role.all() { name }).paginate(1000)`);
+
+    if (roles.data.after !== undefined) {
+      vscode.window.showWarningMessage(
+        "More than 1000 roles were found, so this list is incomplete.",
+      );
+    }
+
+    let allRoles: vscode.QuickPickItem[] = [
+      {
+        label: "Builtin roles",
+        kind: vscode.QuickPickItemKind.Separator,
+      },
+      {
+        label: "admin",
+        description: "A builtin role with all permissions",
+      },
+      {
+        label: "server",
+        description:
+          "A builtin role with permission to edit collections and functions, but not roles.",
+      },
+      {
+        label: "User defined roles",
+        kind: vscode.QuickPickItemKind.Separator,
+      },
+      ...roles.data.data.map((role) => ({
+        label: role.name,
+      })),
+    ];
+
+    const quickPick = vscode.window.createQuickPick();
+    quickPick.items = allRoles;
+    quickPick.onDidChangeSelection((selection) => {
+      quickPick.hide();
+      const role = selection[0].label;
+      this.execute({ role });
+    });
+    quickPick.onDidHide(() => quickPick.dispose());
+    quickPick.show();
+  }
+
+  async execute({ role }: { role?: string }) {
     const { activeTextEditor } = vscode.window;
 
     if (!activeTextEditor || activeTextEditor.document.languageId !== "fql") {
@@ -38,14 +101,17 @@ export class RunQueryHandler implements ConfigurationChangeSubscription {
       return;
     }
 
-    const text = activeTextEditor.document.getText();
+    const query = activeTextEditor.document.getText();
 
     this.outputChannel.clear();
     this.outputChannel.show(true); // don't move the cursor off the text editor
     try {
-      var response = await this.fqlClient.query(fql([text]), {
+      var response = await this.fqlClient.query(fql([query]), {
         format: "decorated",
         typecheck: true,
+        secret: `${this.fqlClient.clientConfiguration.secret}${
+          role ? ":" + roleSecret(role) : ""
+        }`,
       });
 
       if (response.static_type !== undefined) {
@@ -73,3 +139,11 @@ export class RunQueryHandler implements ConfigurationChangeSubscription {
     }
   }
 }
+
+const roleSecret = (role: string): string => {
+  if (role == "admin" || role == "server") {
+    return role;
+  } else {
+    return `@role/${role}`;
+  }
+};

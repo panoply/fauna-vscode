@@ -46,6 +46,25 @@ suite("Extension Test Suite", () => {
     assert.ok(containsCollectionCompletionItem(completionList, "Cats"));
   });
 
+  test("should run queries", async () => {
+    await testHelper.activateFQLExtension();
+
+    const documentText = "2 + 3";
+    const doc = await vscode.workspace.openTextDocument({
+      language: "fql",
+      content: documentText,
+    });
+    await vscode.window.showTextDocument(doc);
+    const position = new vscode.Position(0, 1);
+
+    await vscode.commands.executeCommand("fql.runQuery", doc.uri, position);
+
+    const output = getOutputChannelText();
+
+    assert.ok(output.includes("static type: Number"));
+    assert.ok(output.includes("5"));
+  });
+
   test("should open a fql scratch buffer and provide intellisense and query execution", async () => {
     await testHelper.activateFQLExtension();
 
@@ -106,5 +125,13 @@ suite("Extension Test Suite", () => {
         item.detail === `${collectionName}Collection`
       );
     });
+  }
+
+  function getOutputChannelText(): string {
+    if (vscode.window.visibleTextEditors.length == 2) {
+      return vscode.window.visibleTextEditors[1].document.getText();
+    } else {
+      throw new Error("no output channel open");
+    }
   }
 });

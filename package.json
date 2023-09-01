@@ -16,7 +16,7 @@
   ],
   "main": "./out/extension.js",
   "dependencies": {
-    "fauna": "^0.9.0",
+    "fauna": "^1.1.0",
     "vscode-languageclient": "^8.0.2"
   },
   "devDependencies": {
@@ -73,6 +73,18 @@
       {
         "command": "fql.runQuery",
         "title": "FQL: Run Query"
+      },
+      {
+        "command": "fql.runQueryAsRole",
+        "title": "FQL: Run Query as Role"
+      },
+      {
+        "command": "fql.runQueryAsDoc",
+        "title": "FQL: Run Query as Document"
+      },
+      {
+        "command": "fql.runQueryWithSecret",
+        "title": "FQL: Run Query with Secret"
       },
       {
         "command": "fql.togglePlayground",
