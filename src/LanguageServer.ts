@@ -109,6 +109,7 @@ export class LanguageService implements ConfigurationChangeSubscription {
 
   async refresh(version: string) {
     const resp = (await this.client.sendRequest("fauna/refresh", {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       schema_version: version,
     })) as any;
     if (resp.status === "error") {

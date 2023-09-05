@@ -128,7 +128,7 @@ suite("Extension Test Suite", () => {
   }
 
   function getOutputChannelText(): string {
-    if (vscode.window.visibleTextEditors.length == 2) {
+    if (vscode.window.visibleTextEditors.length === 2) {
       return vscode.window.visibleTextEditors[1].document.getText();
     } else {
       throw new Error("no output channel open");

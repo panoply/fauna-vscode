@@ -141,7 +141,7 @@ export class RunQueryHandler implements ConfigurationChangeSubscription {
 }
 
 const roleSecret = (role: string): string => {
-  if (role == "admin" || role == "server") {
+  if (role === "admin" || role === "server") {
     return role;
   } else {
     return `@role/${role}`;
