@@ -34,7 +34,7 @@ export async function activate(context: vscode.ExtensionContext) {
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
   const disposables = [
-    vscode.commands.registerCommand("fql.togglePlayground", () =>
+    vscode.commands.registerCommand("fauna.togglePlayground", () =>
       togglePlaygroundCommand.togglePlayground(),
     ),
     ...runQueryHandler.disposables(),

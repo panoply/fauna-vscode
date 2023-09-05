@@ -1,28 +1,25 @@
-# FQLX VsCode
+# FQL VSCode
 
-This is a vscode plugin for FQLX. I'm not sure how to export plugins, so for now
-just open up vscode in this project, and hit `F5` to open a second instance of
-vscode, which will have this plugin running.
+This is the Fauna extension for VS Code. It allows users to write and run FQL queries against their database from the FQL Playground. This plugin provides intellisense with autocompletions tailored to your database when writing queries within the playground or any other .fql file.
 
-This also needs to be updated with the typescript template stuff, such as husky
-and fixes to the scripts in `package.json`. This is a very hacky repo! It is
-just a proof of concept for syntax highlighting and a language server.
+To get started, simply configure the extension with your secret and press `cmd+l` (Mac) or `ctrl+l` (Linux/Windows) to open the FQL Playground! You can also use the VSCode command palette, `Fauna: Toggle Playground`.
 
-### To Compile
+## Configuration
 
-First, compile the [fqlx-lsp](https://github.com/fauna/fqlx-lsp) repo, and have
-that repository cloned next to this one. Once that is finished, run the
-following commands:
-```
-yarn install
-yarn compile
-```
+To configure the extension, simply open up the extension configuration in VS Code and set your secret to the database you'd like to run queries against.
 
-This will install dependencies, and compile the typescript code.
+This can be configured globally across all VS Code instances, as well as at the Workspace level to allow for different databases per VS Code project.
 
-Finally, open vscode in this directory, and hit F5 to run a new version of
-vscode, which will have this plugin running.
+## Running FQL Queries
 
-Now in this new instance of vscode, create a file with the `.fqlx` extension.
-This should have syntax highlighting, and a language server should give live
-error messages.
+To start writing and running FQL queries open the FQL Playground (`cmd+l` on Mac, `ctrl+l` on Linux/Windows) or `Fauna: Toggle Playground` from the VS Code command palette.
+
+This command will toggle the playground, so if not active, it will open, and then when pressed again the playground will close. It will automatically save the content when the command is used to close it. Intellisense will be present as you begin typing queries into the playground.
+
+To execute a query in the playground, use the `Run Query` button in the top right or press `cmd+enter` (Mac) or `ctrl+enter` Linx/Windows.
+
+You can get all of the same functionality in `.fql` files that you open and save. This allows you to have any number of queries saved in your project that you can open and run.
+
+## Run As Role
+
+Running as role is currently available but only from the command palette. Look for `Fauna: Run Query As Role`. This will open up a quick pick section with your available roles to run from.

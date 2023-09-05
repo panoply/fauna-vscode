@@ -57,7 +57,7 @@ suite("Extension Test Suite", () => {
     await vscode.window.showTextDocument(doc);
     const position = new vscode.Position(0, 1);
 
-    await vscode.commands.executeCommand("fql.runQuery", doc.uri, position);
+    await vscode.commands.executeCommand("fauna.runQuery", doc.uri, position);
 
     const output = getOutputChannelText();
 
@@ -68,12 +68,12 @@ suite("Extension Test Suite", () => {
   test("should open a fql scratch buffer and provide intellisense and query execution", async () => {
     await testHelper.activateFQLExtension();
 
-    await vscode.commands.executeCommand("fql.togglePlayground");
+    await vscode.commands.executeCommand("fauna.togglePlayground");
 
     const editor = vscode.window.activeTextEditor;
     if (editor === undefined) {
       assert.fail(
-        "Expected fql.openShell command to set an active text editor",
+        "Expected fauna.openShell command to set an active text editor",
       );
     }
     await editor.edit((editBuilder) => {
