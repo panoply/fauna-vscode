@@ -13,6 +13,38 @@ import { TogglePlaygroundCommand } from "./TogglePlaygroundCommand";
 export async function activate(context: vscode.ExtensionContext) {
   const outputChannel = vscode.window.createOutputChannel("FQL");
 
+  const oldExtension = vscode.extensions.getExtension("fauna.fauna");
+  if (oldExtension !== undefined) {
+    const OLD_ERROR =
+      "The Fauna extension cannot be used alongside the prior one. Please uninstall or disable the old extension.";
+    const showError = () => {
+      vscode.window
+        .showErrorMessage(OLD_ERROR, "Disable old extension")
+        .then((selection) => {
+          if (selection === "Disable old extension") {
+            vscode.commands.executeCommand(
+              "workbench.extensions.search",
+              "@id:fauna.fauna",
+            );
+          }
+        });
+    };
+
+    showError();
+
+    context.subscriptions.push(
+      ...[
+        vscode.commands.registerCommand("fauna.togglePlayground", showError),
+        vscode.commands.registerCommand("fauna.runQuery", showError),
+        vscode.commands.registerCommand("fauna.runQueryAsRole", showError),
+        vscode.commands.registerCommand("fauna.runQueryAsDoc", showError),
+        vscode.commands.registerCommand("fauna.runQueryWithSecret", showError),
+      ],
+    );
+
+    return;
+  }
+
   const fqlConfigManager = new FQLConfigurationManager();
 
   const fqlClient = new Client({
