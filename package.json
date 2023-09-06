@@ -2,7 +2,7 @@
   "name": "fql",
   "displayName": "Fauna",
   "description": "FQL language support",
-  "icon": "icons/fauna-extension-logo.png",
+  "icon": "icons/fauna-light.png",
   "publisher": "Fauna",
   "version": "0.0.1",
   "engines": {
