@@ -11,7 +11,7 @@ import { TogglePlaygroundCommand } from "./TogglePlaygroundCommand";
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
-  const outputChannel = vscode.window.createOutputChannel("FQL");
+  const outputChannel = vscode.window.createOutputChannel("FQL", "fql");
 
   const oldExtension = vscode.extensions.getExtension("fauna.fauna");
   if (oldExtension !== undefined) {
