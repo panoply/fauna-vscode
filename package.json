@@ -3,6 +3,10 @@
   "displayName": "Fauna",
   "description": "FQL language support",
   "icon": "icons/fauna-light.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fauna/fauna-vscode"
+  },
   "publisher": "Fauna",
   "version": "0.0.1",
   "engines": {
@@ -12,11 +16,6 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:fauna.runQuery",
-    "onCommand:fauna.runQueryAsDoc",
-    "onCommand:fauna.runQueryAsRole",
-    "onCommand:fauna.runQueryWithSecret",
-    "onCommand:fauna.togglePlayground",
     "onLanguage:fql"
   ],
   "main": "./out/extension.js",
@@ -51,11 +50,13 @@
   },
   "contributes": {
     "menus": {
-      "editor/title": [{
-        "command": "fauna.runQuery",
-        "group": "navigation@0",
-        "when": "resourceLangId == fql"
-      }]
+      "editor/title": [
+        {
+          "command": "fauna.runQuery",
+          "group": "navigation@0",
+          "when": "resourceLangId == fql"
+        }
+      ]
     },
     "configuration": {
       "title": "Fauna",
