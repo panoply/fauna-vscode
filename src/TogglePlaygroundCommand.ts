@@ -2,11 +2,40 @@ import * as path from "path";
 import * as vscode from "vscode";
 
 export class TogglePlaygroundCommand {
-  playgroundFilePath = path.join(
-    vscode.workspace.rootPath ?? "",
-    ".fauna",
-    "FQLPlayground.fql",
-  );
+  playgroundFilePath: string;
+  constructor(playgroundFilePath: string) {
+    this.playgroundFilePath = playgroundFilePath;
+  }
+
+  static async create(
+    context: vscode.ExtensionContext,
+  ): Promise<TogglePlaygroundCommand> {
+    if (context.storageUri === undefined) {
+      // the above means we aren't in a project, so need to use the global storage uri
+      return await TogglePlaygroundCommand.getCommandForStorageUri(
+        context.globalStorageUri,
+      );
+    } else {
+      return await TogglePlaygroundCommand.getCommandForStorageUri(
+        context.storageUri,
+      );
+    }
+  }
+
+  static async getCommandForStorageUri(
+    uri: vscode.Uri,
+  ): Promise<TogglePlaygroundCommand> {
+    const exists = await vscode.workspace.fs.stat(uri).then(
+      () => true,
+      () => false,
+    );
+    if (!exists) {
+      await vscode.workspace.fs.createDirectory(uri);
+    }
+    return new TogglePlaygroundCommand(
+      path.join(uri.fsPath, ".fauna", "FQLPlayground.fql"),
+    );
+  }
 
   async togglePlayground() {
     if (this.isShellInView()) {
