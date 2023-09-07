@@ -1,4 +1,4 @@
-import { Client, endpoints, fql } from "fauna";
+import { Client } from "../../client";
 import * as vscode from "vscode";
 
 export async function activateFQLExtension() {
@@ -28,7 +28,7 @@ export function getClient(): Client {
 
 export function getLocalClient(): Client {
   return new Client({
-    endpoint: endpoints.local,
+    endpoint: new URL("http://localhost:8443"),
     secret: "secret",
   });
 }
@@ -48,18 +48,18 @@ export const clientWithFreshDB = async (
   name: string,
 ): Promise<[Client, string]> => {
   const parentClient = getClient();
-  const secretQ = await parentClient.query<string>(fql`
-    if (Database.byName(${name}).exists()) {
-      Key.where(.database == ${name}).forEach(.delete())
-      Database.byName(${name})!.delete()
+  const secretQ = await parentClient.query<string>(`
+    if (Database.byName('${name}').exists()) {
+      Key.where(.database == '${name}').forEach(.delete())
+      Database.byName('${name}')!.delete()
     }
-    Database.create({ name: ${name} })
-    Key.create({ role: "admin", database: ${name} }).secret
+    Database.create({ name: '${name}' })
+    Key.create({ role: "admin", database: '${name}' }).secret
   `);
 
   return [
     new Client({
-      endpoint: parentClient.clientConfiguration.endpoint,
+      endpoint: parentClient.endpoint,
       secret: secretQ.data,
     }),
     secretQ.data,

@@ -1,4 +1,4 @@
-import { Client, ServiceError, fql } from "fauna";
+import { Client, FaunaError } from "./client";
 import * as vscode from "vscode";
 import {
   ConfigurationChangeSubscription,
@@ -48,7 +48,7 @@ export class RunQueryHandler implements ConfigurationChangeSubscription {
     const roles = await this.fqlClient.query<{
       data: { name: string }[];
       after?: string;
-    }>(fql`(Role.all() { name }).paginate(1000)`);
+    }>("(Role.all() { name }).paginate(1000)");
 
     if (roles.data.after !== undefined) {
       vscode.window.showWarningMessage(
@@ -134,13 +134,10 @@ export class RunQueryHandler implements ConfigurationChangeSubscription {
     }
 
     try {
-      var response = await this.fqlClient.query(fql([query]), {
+      var response = await this.fqlClient.query(query, {
         format: "decorated",
         typecheck: true,
-        secret: secretForScope(
-          this.fqlClient.clientConfiguration.secret ?? "",
-          scope ?? {},
-        ),
+        secret: secretForScope(this.fqlClient.secret ?? "", scope ?? {}),
       });
 
       if (response.static_type !== undefined) {
@@ -159,13 +156,13 @@ export class RunQueryHandler implements ConfigurationChangeSubscription {
         await this.languageService.refresh((response as any).schema_version);
       }
     } catch (e) {
-      if (e instanceof ServiceError) {
+      if (e instanceof FaunaError) {
         if (e.message !== undefined) {
           this.outputChannel.appendLine(e.message);
         }
-        if (e.queryInfo?.summary !== undefined) {
+        if (e.summary !== undefined) {
           this.outputChannel.appendLine("");
-          this.outputChannel.appendLine(e.queryInfo?.summary);
+          this.outputChannel.appendLine(e.summary);
         }
       } else {
         console.log(e);

@@ -10,17 +10,6 @@
     "prettier"
   ],
   "rules": {
-    "@typescript-eslint/naming-convention": [
-      "warn",
-      {
-        "selector": "property",
-        "format": [
-          "camelCase",
-          "UPPER_CASE"
-        ],
-        "leadingUnderscore": "allow"
-      }
-    ],
     "@typescript-eslint/semi": "warn",
     "curly": "warn",
     "eqeqeq": "warn",

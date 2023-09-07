@@ -2,8 +2,8 @@
 // as well as import your extension to test it
 // import * as vscode from "vscode";
 import * as assert from "assert";
-import { Client, fql } from "fauna";
 import * as vscode from "vscode";
+import { Client } from "../../client";
 import { FQLConfigurationManager } from "../../FQLConfigurationManager";
 import * as testHelper from "./helper";
 
@@ -14,10 +14,10 @@ suite("Extension Test Suite", () => {
   let secret: string;
   setup(async () => {
     [fqlClient, secret] = await testHelper.clientWithFreshDB("VSCodeTest");
-    await fqlClient.query(fql`Collection.create({ name: "Cats" })`);
+    await fqlClient.query(`Collection.create({ name: "Cats" })`);
     await setConfigSecret(secret);
-    if (fqlClient.clientConfiguration.endpoint) {
-      await setConfigEndpoint(fqlClient.clientConfiguration.endpoint.href);
+    if (fqlClient.endpoint) {
+      await setConfigEndpoint(fqlClient.endpoint.href);
     }
   });
 

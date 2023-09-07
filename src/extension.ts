@@ -1,6 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { Client } from "fauna";
+import { Client } from "./client";
 import * as vscode from "vscode";
 
 import { FQLConfigurationManager } from "./FQLConfigurationManager";

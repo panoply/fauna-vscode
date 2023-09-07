@@ -20,7 +20,7 @@
   ],
   "main": "./out/extension.js",
   "dependencies": {
-    "fauna": "^1.1.0",
+    "cross-fetch": "^4.0.0",
     "vscode-languageclient": "^8.0.2"
   },
   "devDependencies": {
