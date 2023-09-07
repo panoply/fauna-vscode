@@ -121,6 +121,18 @@ export class RunQueryHandler implements ConfigurationChangeSubscription {
 
     this.outputChannel.clear();
     this.outputChannel.show(true); // don't move the cursor off the text editor
+
+    if (scope?.role !== undefined) {
+      this.outputChannel.appendLine(`query run with role: ${scope.role}`);
+      this.outputChannel.appendLine("");
+    } else if (scope?.doc !== undefined) {
+      this.outputChannel.appendLine(`query run with document: ${scope.doc}`);
+      this.outputChannel.appendLine("");
+    } else if (scope?.secret !== undefined) {
+      this.outputChannel.appendLine(`query run with secret: ${scope.secret}`);
+      this.outputChannel.appendLine("");
+    }
+
     try {
       var response = await this.fqlClient.query(fql([query]), {
         format: "decorated",
@@ -132,10 +144,15 @@ export class RunQueryHandler implements ConfigurationChangeSubscription {
       });
 
       if (response.static_type !== undefined) {
-        this.outputChannel.appendLine("static type: " + response.static_type);
+        this.outputChannel.appendLine(`static type: ${response.static_type}`);
+        this.outputChannel.appendLine("");
       }
 
-      this.outputChannel.appendLine(response.summary ?? "");
+      if ((response.summary ?? "").length > 0) {
+        this.outputChannel.appendLine(response.summary ?? "");
+        this.outputChannel.appendLine("");
+      }
+
       this.outputChannel.appendLine(response.data as any);
 
       if ((response as any).schema_version !== undefined) {
@@ -147,6 +164,7 @@ export class RunQueryHandler implements ConfigurationChangeSubscription {
           this.outputChannel.appendLine(e.message);
         }
         if (e.queryInfo?.summary !== undefined) {
+          this.outputChannel.appendLine("");
           this.outputChannel.appendLine(e.queryInfo?.summary);
         }
       } else {
