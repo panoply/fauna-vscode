@@ -129,6 +129,29 @@
         "key": "ctrl+l",
         "mac": "cmd+l"
       }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "fauna-explorer",
+          "title": "Fauna",
+          "icon": "icons/fauna-light.png"
+        }
+      ]
+    },
+    "views": {
+      "fauna-explorer": [
+        {
+          "id": "welcomeView",
+          "name": "Fauna"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "welcomeView",
+        "contents": "Welcome to the Fauna VSCode extension! To get started, configure your environment:\n[Configure Fauna Extension](command:workbench.action.openSettings?%22fauna%22)\nOnce configured, open the FQL Playground to begin writing queries!\n[Open FQL Playground](command:fauna.togglePlayground)\n"
+      }
     ]
   }
 }
