@@ -5,6 +5,7 @@ export type Success<T> = {
   summary: string;
   static_type: string;
   txn_ts: number;
+  schema_version: number;
   stats: {
     [key: string]: string;
   };
