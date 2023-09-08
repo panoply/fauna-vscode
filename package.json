@@ -133,14 +133,14 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "fauna-explorer",
+          "id": "fauna",
           "title": "Fauna",
           "icon": "icons/fauna-light.png"
         }
       ]
     },
     "views": {
-      "fauna-explorer": [
+      "fauna": [
         {
           "id": "welcomeView",
           "name": "Fauna"
