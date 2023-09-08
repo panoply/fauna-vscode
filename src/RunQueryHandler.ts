@@ -119,9 +119,16 @@ export class RunQueryHandler implements ConfigurationChangeSubscription {
     const { activeTextEditor } = vscode.window;
 
     if (!activeTextEditor || activeTextEditor.document.languageId !== "fql") {
-      vscode.window.showWarningMessage(
-        "You have to select a FQL document to run a FQL query.",
-      );
+      vscode.window
+        .showWarningMessage(
+          "To run a query, open the playground or an FQL document.",
+          "Open the playground",
+        )
+        .then((selection) => {
+          if (selection === "Open the playground") {
+            vscode.commands.executeCommand("fauna.togglePlayground");
+          }
+        });
       return;
     }
 
