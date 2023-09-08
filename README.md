@@ -4,11 +4,11 @@ This is the Fauna extension for VS Code. It allows users to write and run FQL qu
 
 To get started, simply configure the extension with your secret and press `cmd+l` (Mac) or `ctrl+l` (Linux/Windows) to open the FQL Playground! You can also use the VSCode command palette, `Fauna: Toggle Playground`.
 
-## Configuration
+## Settings
 
-To configure the extension, simply open up the extension configuration in VS Code and set your secret to the database you'd like to run queries against.
+Before using the extension, you will need to open the extension settings and set your secret to the database you'd like to run queries against.
 
-This can be configured globally across all VS Code instances, as well as at the Workspace level to allow for different databases per VS Code project.
+This can be set globally across all VS Code instances, as well as at the Workspace level to allow for different databases per VS Code project.
 
 ## Running FQL Queries
 
@@ -23,3 +23,16 @@ You can get all of the same functionality in `.fql` files that you open and save
 ## Run As Role
 
 Running as role is currently available but only from the command palette. Look for `Fauna: Run Query As Role`. This will open up a quick pick section with your available roles to run from.
+
+## Commands
+
+- Fauna: Run Query
+  - execute the query in the FQL Playground or active .fql file.
+- Fauna: Run Query as Document
+  - execute the query in the FQL Playground or active .fql file as the provided document. This is useful if you have a document that has role membership and would like to test its' permission.
+- Fauna: Run Query with Secret
+  - execute the query in the FQL Playground or active .fql files with a specified secret (as opposed to the secret set for the extension).
+- Fauna: Run Query as Role
+  - execute the query in the FQL Playground or active .fql file as the provided role.
+- Fauna: Toggle Playground
+  - open the FQL Playground if closed/close the FQL Playground if open. This command will auto save the contents prior to closing.
