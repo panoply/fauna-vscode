@@ -5,7 +5,7 @@ export class FQLConfigurationManager {
    * but will fail with correct error if an invalid one is present
    */
   static readonly EMPTY_SECRET = "0";
-  static readonly FAUNA_CONFIG_PATH = "fauna";
+  static readonly FAUNA_CONFIG_PATH = "fauna-vscode";
   static readonly SECRET_CONFIG_FIELD = "dbSecret";
   static readonly ENDPOINT_CONFIG_FIELD = "endpoint";
   static readonly SECRET_CONFIG_PATH = `${FQLConfigurationManager.FAUNA_CONFIG_PATH}.${FQLConfigurationManager.SECRET_CONFIG_FIELD}`;

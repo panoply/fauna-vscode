@@ -32,17 +32,20 @@ export class RunQueryHandler implements ConfigurationChangeSubscription {
     const registerCommand = vscode.commands.registerCommand;
     // Passing `this.runQuery` directly wont work, so we need these arrow functions.
     return [
-      registerCommand("fauna.runQuery", async () => await this.runQuery()),
       registerCommand(
-        "fauna.runQueryAsRole",
+        "fauna-vscode.runQuery",
+        async () => await this.runQuery(),
+      ),
+      registerCommand(
+        "fauna-vscode.runQueryAsRole",
         async () => await this.runQueryAsRole(),
       ),
       registerCommand(
-        "fauna.runQueryAsDoc",
+        "fauna-vscode.runQueryAsDoc",
         async () => await this.runQueryAsDoc(),
       ),
       registerCommand(
-        "fauna.runQueryWithSecret",
+        "fauna-vscode.runQueryWithSecret",
         async () => await this.runQueryWithSecret(),
       ),
     ];
@@ -126,7 +129,7 @@ export class RunQueryHandler implements ConfigurationChangeSubscription {
         )
         .then((selection) => {
           if (selection === "Open the playground") {
-            vscode.commands.executeCommand("fauna.togglePlayground");
+            vscode.commands.executeCommand("fauna-vscode.togglePlayground");
           }
         });
       return;

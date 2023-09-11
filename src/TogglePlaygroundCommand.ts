@@ -33,7 +33,7 @@ export class TogglePlaygroundCommand {
       await vscode.workspace.fs.createDirectory(uri);
     }
     return new TogglePlaygroundCommand(
-      path.join(uri.fsPath, ".fauna", "FQLPlayground.fql"),
+      path.join(uri.fsPath, ".fauna-vscode", "FQLPlayground.fql"),
     );
   }
 

@@ -1,5 +1,5 @@
 {
-  "name": "fql",
+  "name": "fauna-vscode",
   "displayName": "Fauna",
   "description": "FQL language support",
   "icon": "icons/fauna-light.png",
@@ -52,7 +52,7 @@
     "menus": {
       "editor/title": [
         {
-          "command": "fauna.runQuery",
+          "command": "fauna-vscode.runQuery",
           "group": "navigation@0",
           "when": "resourceLangId == fql"
         }
@@ -62,13 +62,13 @@
       "title": "Fauna",
       "type": "object",
       "properties": {
-        "fauna.dbSecret": {
+        "fauna-vscode.dbSecret": {
           "type": "string",
           "default": "",
           "description": "The secret to use to connnect to your fauna database.",
           "scope": "window"
         },
-        "fauna.endpoint": {
+        "fauna-vscode.endpoint": {
           "type": "string",
           "default": "https://db.fauna.com",
           "description": "The fauna endpoint url to use. This should typically be 'https://db.fauna.com'.",
@@ -78,23 +78,23 @@
     },
     "commands": [
       {
-        "command": "fauna.runQuery",
+        "command": "fauna-vscode.runQuery",
         "title": "Fauna: Run Query"
       },
       {
-        "command": "fauna.runQueryAsRole",
+        "command": "fauna-vscode.runQueryAsRole",
         "title": "Fauna: Run Query as Role"
       },
       {
-        "command": "fauna.runQueryAsDoc",
+        "command": "fauna-vscode.runQueryAsDoc",
         "title": "Fauna: Run Query as Document"
       },
       {
-        "command": "fauna.runQueryWithSecret",
+        "command": "fauna-vscode.runQueryWithSecret",
         "title": "Fauna: Run Query with Secret"
       },
       {
-        "command": "fauna.togglePlayground",
+        "command": "fauna-vscode.togglePlayground",
         "title": "Fauna: Toggle Playground"
       }
     ],
@@ -119,13 +119,13 @@
     ],
     "keybindings": [
       {
-        "command": "fauna.runQuery",
+        "command": "fauna-vscode.runQuery",
         "key": "ctrl+enter",
         "mac": "cmd+enter",
         "when": "editorTextFocus && editorLangId == fql"
       },
       {
-        "command": "fauna.togglePlayground",
+        "command": "fauna-vscode.togglePlayground",
         "key": "ctrl+l",
         "mac": "cmd+l"
       }
@@ -150,7 +150,7 @@
     "viewsWelcome": [
       {
         "view": "welcomeView",
-        "contents": "Welcome to the Fauna VSCode extension! To get started, configure your environment:\n[Configure Fauna Extension](command:workbench.action.openSettings?%22fauna%22)\nOnce configured, open the FQL Playground to begin writing queries!\n[Open FQL Playground](command:fauna.togglePlayground)\n"
+        "contents": "Welcome to the Fauna VSCode extension! To get started, configure your environment:\n[Configure Fauna Extension](command:workbench.action.openSettings?%22fauna-vscode%22)\nOnce configured, open the FQL Playground to begin writing queries!\n[Open FQL Playground](command:fauna-vscode.togglePlayground)\n"
       }
     ]
   }

@@ -34,11 +34,23 @@ export async function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(
       ...[
-        vscode.commands.registerCommand("fauna.togglePlayground", showError),
-        vscode.commands.registerCommand("fauna.runQuery", showError),
-        vscode.commands.registerCommand("fauna.runQueryAsRole", showError),
-        vscode.commands.registerCommand("fauna.runQueryAsDoc", showError),
-        vscode.commands.registerCommand("fauna.runQueryWithSecret", showError),
+        vscode.commands.registerCommand(
+          "fauna-vscode.togglePlayground",
+          showError,
+        ),
+        vscode.commands.registerCommand("fauna-vscode.runQuery", showError),
+        vscode.commands.registerCommand(
+          "fauna-vscode.runQueryAsRole",
+          showError,
+        ),
+        vscode.commands.registerCommand(
+          "fauna-vscode.runQueryAsDoc",
+          showError,
+        ),
+        vscode.commands.registerCommand(
+          "fauna-vscode.runQueryWithSecret",
+          showError,
+        ),
       ],
     );
 
@@ -66,7 +78,7 @@ export async function activate(context: vscode.ExtensionContext) {
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
   const disposables = [
-    vscode.commands.registerCommand("fauna.togglePlayground", () =>
+    vscode.commands.registerCommand("fauna-vscode.togglePlayground", () =>
       togglePlaygroundCommand.togglePlayground(),
     ),
     ...runQueryHandler.disposables(),

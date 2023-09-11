@@ -2,7 +2,7 @@ import { Client } from "../../client";
 import * as vscode from "vscode";
 
 export async function activateFQLExtension() {
-  const ext = vscode.extensions.getExtension("Fauna.fql");
+  const ext = vscode.extensions.getExtension("fauna.fauna-vscode");
   try {
     await ext?.activate();
     // allow time for extension to activate
