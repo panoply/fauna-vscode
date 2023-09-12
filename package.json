@@ -62,13 +62,13 @@
       "title": "Fauna",
       "type": "object",
       "properties": {
-        "fauna-vscode.dbSecret": {
+        "fauna.dbSecret": {
           "type": "string",
           "default": "",
           "description": "The secret to use to connnect to your fauna database.",
           "scope": "window"
         },
-        "fauna-vscode.endpoint": {
+        "fauna.endpoint": {
           "type": "string",
           "default": "https://db.fauna.com",
           "description": "The fauna endpoint url to use. This should typically be 'https://db.fauna.com'.",
@@ -150,7 +150,7 @@
     "viewsWelcome": [
       {
         "view": "welcomeView",
-        "contents": "Welcome to the Fauna VSCode extension! To get started, configure your environment:\n[Configure Fauna Extension](command:workbench.action.openSettings?%22fauna-vscode%22)\nOnce configured, open the FQL Playground to begin writing queries!\n[Open FQL Playground](command:fauna-vscode.togglePlayground)\n"
+        "contents": "Welcome to the Fauna VSCode extension! To get started, configure your environment:\n[Configure Fauna Extension](command:workbench.action.openSettings?%22@ext:fauna.fauna-vscode%22)\nOnce configured, open the FQL Playground to begin writing queries!\n[Open FQL Playground](command:fauna-vscode.togglePlayground)\n"
       }
     ]
   }
