@@ -108,6 +108,16 @@
           "light": "./icons/fauna.svg",
           "dark": "./icons/fauna-light.svg"
         }
+      },
+      {
+        "id": "fsl",
+        "extensions": [
+          ".fsl"
+        ],
+        "icon": {
+          "light": "./icons/fauna.svg",
+          "dark": "./icons/fauna-light.svg"
+        }
       }
     ],
     "grammars": [
@@ -115,6 +125,11 @@
         "language": "fql",
         "scopeName": "source.fql",
         "path": "./syntax/fql.tmGrammar.json"
+      },
+      {
+        "language": "fsl",
+        "scopeName": "source.fsl",
+        "path": "./syntax/fsl.tmGrammar.json"
       }
     ],
     "keybindings": [

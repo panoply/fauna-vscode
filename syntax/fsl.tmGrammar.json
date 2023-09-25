@@ -1,0 +1,72 @@
+{
+  "name": "fsl",
+  "scopeName": "source.fsl",
+  "patterns": [
+    {
+      "comment": "Single-line comment",
+      "name": "comment.line.double-slash.fsl",
+      "begin": "//",
+      "end": "$"
+    },
+    {
+      "include": "#block_comment"
+    },
+    {
+      "comment": "Function body",
+      "name": "constant.function.fsl",
+      "pattern": "\\b(function)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+      "captures": {
+        "1": {
+          "name": "keyword.control.fsl"
+        },
+        "2": {
+          "name": "entity.name.function.fsl"
+        }
+      }
+    },
+    {
+      "comment": "Schema block",
+      "name": "constant.block.fsl",
+      "match": "\\b(collection|role|index|privileges|membership|(access\\s+provider))\\b(\\s+[a-zA-Z_][a-zA-Z0-9_]*)?",
+      "captures": {
+        "1": {
+          "name": "keyword.control.fsl"
+        },
+        "3": {
+          "name": "entity.name.type.fsl"
+        }
+      }
+    },
+    {
+      "comment": "Keyword",
+      "name": "keyword.control.fsl",
+      "match": "\\b(collection|function|role|access|provider|index|privileges|membership)\\b"
+    },
+    {
+      "comment": "Action keyword",
+      "name": "variable.other.constant.property",
+      "match": "\\b(create|delete|read|write|call|history_read|history_write|unrestricted_read)\\b"
+    },
+    {
+      "comment": "Field keyword",
+      "name": "variable.other.property",
+      "match": "\\b(terms|values|unique|predicate|history_days|ttl_days|issuer|jwks_uri)\\b"
+    },
+    {
+      "include": "source.fql"
+    }
+  ],
+  "repository": {
+    "block_comment": {
+      "comment": "Block comment",
+      "name": "comment.block.fsl",
+      "begin": "/\\*",
+      "end": "\\*/",
+      "patterns": [
+        {
+          "include": "#block_comment"
+        }
+      ]
+    }
+  }
+}
