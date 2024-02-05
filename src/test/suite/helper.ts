@@ -1,5 +1,5 @@
-import { Client } from "../../client";
 import * as vscode from "vscode";
+import { Client } from "../../client";
 
 export async function activateFQLExtension() {
   const ext = vscode.extensions.getExtension("fauna.fauna-vscode");
@@ -20,7 +20,7 @@ export async function sleep(ms: number) {
 
 export function getClient(): Client {
   if (process.env.VSCODE_DB_SECRET) {
-    return getDevDB(process.env.VSCODE_DB_SECRET);
+    return getDB(process.env.VSCODE_DB_SECRET);
   } else {
     return getLocalClient();
   }
@@ -33,9 +33,9 @@ export function getLocalClient(): Client {
   });
 }
 
-export function getDevDB(secret: string): Client {
+export function getDB(secret: string): Client {
   return new Client({
-    endpoint: new URL("https://db.dev.faunadb.net"),
+    endpoint: new URL("https://db.fauna.com"),
     secret: secret,
   });
 }
