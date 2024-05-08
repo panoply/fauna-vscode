@@ -8,7 +8,7 @@
     "url": "https://github.com/fauna/fauna-vscode"
   },
   "publisher": "Fauna",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "engines": {
     "vscode": "^1.72.0"
   },
@@ -16,7 +16,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onLanguage:fql"
+    "onLanguage:fql",
+    "onLanguage:typescript"
   ],
   "main": "./out/extension.js",
   "dependencies": {
@@ -41,6 +42,7 @@
   "scripts": {
     "vscode:prepublish": "yarn run compile",
     "compile": "tsc -p ./",
+    "developer-setup": "yarn install && yarn compile && yarn download-analyzer",
     "download-analyzer": "bash ./scripts/download-analyzer.sh",
     "watch": "tsc -watch -p ./",
     "pretest": "yarn run compile && yarn run lint && yarn run download-analyzer",
@@ -65,7 +67,7 @@
         "fauna.dbSecret": {
           "type": "string",
           "default": "",
-          "description": "The secret to use to connnect to your fauna database.",
+          "description": "The secret used to connect to your fauna database.",
           "scope": "window"
         },
         "fauna.endpoint": {
@@ -130,6 +132,22 @@
         "language": "fsl",
         "scopeName": "source.fsl",
         "path": "./syntax/fsl.tmGrammar.json"
+      },
+      {
+        "injectTo": [
+          "source.js",
+          "source.jsx",
+          "source.ts",
+          "source.tsx",
+          "text.html.basic",
+          "text.html.derivative",
+          "text.html.markdown"
+        ],
+        "scopeName": "meta.embedded.block.fql",
+        "path": "./syntax/fql.embedded.js.tmGrammar.json",
+        "embeddedLanguages": {
+          "meta.embedded.block.fql": "source.fql"
+        }
       }
     ],
     "keybindings": [

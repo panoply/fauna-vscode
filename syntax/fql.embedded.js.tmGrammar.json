@@ -1,0 +1,34 @@
+{
+  "scopeName": "meta.embedded.block.fql",
+  "injectionSelector": "L:source",
+  "patterns": [
+    {
+      "include": "#fql-block"
+    }
+  ],
+  "repository": {
+    "fql-block": {
+      "begin": "(fql)\\W*(`)",
+      "name": "meta.embedded.block.fql",
+      "end": "`",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.begin.fql"
+        },
+        "1": {
+          "name": "punctuation.definition.string.begin.fql.backtick"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.end.fql"
+        }
+      },
+      "patterns": [
+        {
+          "include": "source.fql"
+        }
+      ]
+    }
+  }
+}

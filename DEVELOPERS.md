@@ -1,7 +1,19 @@
-## Developing the Extension
+# Developing the Extension
 
-Open vscode in this directory, and hit F5 to run a new version of
-vscode, which will have this plugin running.
+## Setup
+Before launching you'll need to fetch the analzyer locally and compile this app:
+
+```
+yarn developer-setup
+```
+
+
+## Launching
+Now to launch:
+
+Open vscode in this directory, and select "Run -> Start Debugging" from the menu,
+there is an `F5` shortcut for this on some systems with some keybindings. This will
+launch a parallel instance of VS code with the local extension running.
 
 Now in this new instance of vscode, press cmd+l/ctrl+l to open the FQL Playground.
 This should have syntax highlighting, and a language server should give live
