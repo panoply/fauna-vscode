@@ -36,3 +36,7 @@ yarn compile
 This will install dependencies, and compile the typescript code.
 
 Once this is complete you'll need to update the debug options in the LanguageServer.ts file. There are comments in that file indicating what is needed to get this setup.
+
+### Publishing updated version
+
+Internal users will please refer to https://faunadb.atlassian.net/wiki/spaces/DX/pages/3229974681
