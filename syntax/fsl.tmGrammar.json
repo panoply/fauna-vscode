@@ -1,6 +1,7 @@
 {
   "name": "fsl",
   "scopeName": "source.fsl",
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
   "patterns": [
     {
       "comment": "Single-line comment",
@@ -9,25 +10,34 @@
       "end": "$"
     },
     {
+      "include": "#object_binding"
+    },
+    {
       "include": "#block_comment"
     },
     {
-      "comment": "Function body",
-      "name": "constant.function.fsl",
-      "pattern": "\\b(function)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
-      "captures": {
-        "1": {
-          "name": "keyword.control.fsl"
-        },
-        "2": {
-          "name": "entity.name.function.fsl"
-        }
-      }
+      "include": "#punctuation"
     },
+    {
+      "include": "#references"
+    },
+    {
+      "include": "#migrations"
+    },
+    {
+      "include": "#functions"
+    },
+    {
+      "include": "#assignment"
+    },
+    {
+      "include": "#data_types"
+    },
+
     {
       "comment": "Schema block",
       "name": "constant.block.fsl",
-      "match": "\\b(collection|role|index|privileges|membership|(access\\s+provider))\\b(\\s+[a-zA-Z_][a-zA-Z0-9_]*)?",
+      "match": "\\b(collection|role|index|migrations|privileges|membership|(access\\s+provider))\\b(\\s+[a-zA-Z_][a-zA-Z0-9_]*)?",
       "captures": {
         "1": {
           "name": "keyword.control.fsl"
@@ -53,10 +63,98 @@
       "match": "\\b(terms|values|unique|predicate|history_days|ttl_days|issuer|jwks_uri)\\b"
     },
     {
+      "name": "variable.other.constant.property",
+      "match": "^\\s+\\b(add|add_wildcard|backfill|drop|move|move_conflicts|move_wildcard|split)\\b\\s+"
+    },
+    {
+      "name": "variable.other.constant.property",
       "include": "source.fql"
     }
   ],
   "repository": {
+    "references": {
+      "patterns": [
+        {
+          "name": "entity.other.fsl",
+          "match": "(?<=[\\[{(=<|>,\\s])(\\.)([.a-zA-Z0-9_$]*)(?=[\\]\\s)!=?<>,|}])",
+          "captures": {
+            "1": {
+              "name": "punctuation.entity.dot.fsl"
+            }
+          }
+        }
+      ]
+    },
+    "functions": {
+      "patterns": [
+        {
+          "name": "entity.name.function.fsl",
+          "match": "(?<=\\.)([a-zA-Z_$\\[][a-zA-Z0-9_$\\]]*)(?=\\()"
+        },
+        {
+          "comment": "Function body",
+          "name": "constant.function.fsl",
+          "pattern": "\\b(function)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+          "captures": {
+            "1": {
+              "name": "keyword.control.fsl"
+            },
+            "2": {
+              "name": "entity.name.function.fsl"
+            }
+          }
+        }
+      ]
+    },
+    "assignment": {
+      "patterns": [
+        {
+          "begin": "(?<!=|!)(=)(?![=>])(?=\\s*\\S)(?!\\s*.*=>\\s*$)",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.operator.assignment.fsl"
+            }
+          },
+          "end": "(?=\\>|$|^|[,);}\\]]|(?=[>,);}\\]]|(?=\\s*$)"
+        }
+      ]
+    },
+    "punctuation": {
+      "patterns": [
+        {
+          "name": "punctuation.separator.key-value.fsl",
+          "match": "(?<=[a-zA-Z0-9*_$])\\:"
+        },
+        {
+          "name": "punctuation.accessor.optional.fsl",
+          "match": "(?<=[a-zA-Z0-9*_$)\\]])[?](?=\\.)"
+        },
+        {
+          "name": "punctuation.accessor.nullable.fsl",
+          "match": "(?<=[a-zA-Z0-9*_$)\\]])[!]"
+        },
+        {
+          "name": "punctuation.separator.key-value.fsl",
+          "match": "(?<=[a-zA-Z0-9*_$])\\:"
+        },
+        {
+          "name": "punctuation.separator.comma.fsl",
+          "match": "(,)"
+        },
+        {
+          "name": "punctuation.separator.semi.fsl",
+          "match": "(;)"
+        },
+        {
+          "name": "punctuation.accessor.optional.fsl",
+          "match": "(?<=\\b(?:Any|Boolean|Date|Document|Null|Number|Double|Int|Long|String|Time|Array|Object|Tuple|Union|Ref)\\b)(\\?)"
+        },
+        {
+          "name": "punctuation.accessor.optional.fsl",
+          "match": "(?<=\\})\\s*(\\?)"
+        }
+      ]
+    },
     "block_comment": {
       "comment": "Block comment",
       "name": "comment.block.fsl",
@@ -65,6 +163,24 @@
       "patterns": [
         {
           "include": "#block_comment"
+        }
+      ]
+    },
+    "data_types": {
+      "patterns": [
+        {
+          "name": "support.type.$1.fsl",
+          "match": "\\b(Any|Boolean|Date|Document|Null|Number|Double|Int|Long|String|Time|Array|Object|Tuple|Union|Ref)\\b"
+        }
+      ]
+    },
+    "object_binding": {
+      "begin": "(?x)(?=((\\b(?<!\\$)0(?:x|X)[0-9a-fA-F][0-9a-fA-F_]*(n)?\\b(?!\\$))|(\\b(?<!\\$)0(?:b|B)[01][01_]*(n)?\\b(?!\\$))|(\\b(?<!\\$)0(?:o|O)?[0-7][0-7_]*(n)?\\b(?!\\$))|((?<!\\$)(?:\n  (?:\\b[0-9][0-9_]*(\\.)[0-9][0-9_]*[eE][+-]?[0-9][0-9_]*(n)?\\b)| # 1.1E+3\n  (?:\\b[0-9][0-9_]*(\\.)[eE][+-]?[0-9][0-9_]*(n)?\\b)|             # 1.E+3\n  (?:\\B(\\.)[0-9][0-9_]*[eE][+-]?[0-9][0-9_]*(n)?\\b)|             # .1E+3\n  (?:\\b[0-9][0-9_]*[eE][+-]?[0-9][0-9_]*(n)?\\b)|                 # 1E+3\n  (?:\\b[0-9][0-9_]*(\\.)[0-9][0-9_]*(n)?\\b)|                      # 1.1\n  (?:\\b[0-9][0-9_]*(\\.)(n)?\\B)|                                  # 1.\n  (?:\\B(\\.)[0-9][0-9_]*(n)?\\b)|                                  # .1\n  (?:\\b[0-9][0-9_]*(n)?\\b(?!\\.))                                 # 1\n)(?!\\$))|([_$[:alpha:]][_$[:alnum:]]*)|(\\'([^\\'\\\\]|\\\\.)*\\')|(\\\"([^\\\"\\\\]|\\\\.)*\\\")|(\\`([^\\`\\\\]|\\\\.)*\\`)|(\\[([^\\[\\]]|\\[[^\\[\\]]*\\])+\\]))\\s*(:))",
+      "end": "(?=:)",
+      "patterns": [
+        {
+          "name": "variable.object.property.fsl",
+          "match": "([_$[:alpha:]][_$[:alnum:]]*)"
         }
       ]
     }
